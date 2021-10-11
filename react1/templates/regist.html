@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    #edit-area{
+      width:50%;
+      margin: 0 auto; 
+    }
+
+  </style>
+</head>
+<h1>Using Template</h1>
+<body>
+<p>This is regist page</p>
+
+
+<form id="edit-area"
+action="{% url 'regist' %}" method="POST">
+{% csrf_token %}
+  <input name="username" type="text" placeholder="username"></input>
+  <input name="password" type="password" placeholder="password"></input>
+  <input name="check_password" type="password" placeholder="password_confirm"></input>
+  <input type="submit" placeholder="submit"></input>
+  <input type="reset" placeholder="reset"></input>
+  {{error}}
+</form>
+</body>
+
+</html>

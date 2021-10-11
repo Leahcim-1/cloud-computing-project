@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+    form{
+        width:50%;
+        margin: 0 auto; 
+        }
+    h1{
+        width:50%;
+        margin: 0 auto; 
+    }
+    input{
+        display:block;
+        width:20%;
+    }
+            
+    </style>
+        <h1>This is login page</h1>
+</head>
+<body>
+    <form action="{% url 'login' %}" method="POST">
+    {% csrf_token %}
+    <input name="username" type="text" placeholder="username" required></input>
+    <input name="password" type="password" placeholder="password" required></input>
+    <input type="submit" value="login">    
+    
+    </form>
+
+    <a href="{% url 'logout' %}">logout</a>
+</body>
+
+</html>
