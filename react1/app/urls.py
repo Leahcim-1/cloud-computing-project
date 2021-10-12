@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import showAllPage,add,Regist,Login,Logout,Apage,mainPage
+from .views import showAllPage,add,Regist,Login,Logout,Apage,mainPage,ethShow
 
 urlpatterns = [
     path('', mainPage.as_view(), name='mainPage'),
@@ -8,5 +8,6 @@ urlpatterns = [
     path('regist', Regist.as_view(), name='regist'),
     path('login', Login.as_view(), name='login'), 
     path('logout', Logout.as_view(), name='logout'),
-    path('apage', Apage.as_view(), name='Apage')
+    path('apage', Apage.as_view(), name='Apage'),
+    path('ethshow', ethShow.as_view(), name='ethShow')
 ] 
