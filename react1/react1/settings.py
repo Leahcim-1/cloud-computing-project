@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework',
     'app',
+    'drf_yasg',
 ]
 
 MIDDLEWARE = [
@@ -83,8 +84,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'test2',
-        'USER': 'root',
-        'PASSWORD':'',
+        'USER': 'dbuser',
+        'PASSWORD':'dbuserdbuser',
         'HOST':'127.0.0.1',
         'PORT':'3306',
     }

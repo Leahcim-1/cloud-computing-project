@@ -5,7 +5,7 @@ from .serializers import TransactionSerializer
 
 from django.shortcuts import render, redirect, reverse
 from django.http import HttpResponse
-from django.views.generic import View
+from rest_framework.views import APIView as View
 
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User, Permission
@@ -28,6 +28,9 @@ class add(View):
 
 
 class showAllPage(View):
+    """
+    DESCRIPTION
+    """
     TEMPLATE = 'showAll.html'
     def get(self, request):
         transactions_all=Transactions.objects.all()
