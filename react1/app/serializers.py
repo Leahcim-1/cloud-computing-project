@@ -1,7 +1,8 @@
 from rest_framework import serializers
-from .models import Transactions
+from django.contrib.auth.models import User
 
-class TransactionSerializer(serializers.ModelSerializer):
+
+class UserSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Transactions
-        fields = ('id', 'name', 'price', 'time')
+        model = User
+        fields = '__all__'
