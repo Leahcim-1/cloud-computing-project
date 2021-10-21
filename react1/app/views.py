@@ -1,30 +1,72 @@
-from datetime import datetime
 from rest_framework.response import Response
-from .serializers import UserSerializer
+from .serializers import CustomUserSerializer, AddressSerializer, ProjectSerializer
 
-from django.shortcuts import render, redirect, reverse
-from django.http import HttpResponse
-from rest_framework.views import APIView
-from rest_framework import generics
+from rest_framework import generics, status
 
-from django.contrib.auth.hashers import make_password
-from django.contrib.auth.models import User, Permission
-from django.contrib.auth import login, logout, authenticate
+from .models import CustomUser, Address, Project, UserProject
 
 
 class UserList(generics.ListCreateAPIView):
-    serializer_class = UserSerializer
-    queryset = User.objects.all()
+    serializer_class = CustomUserSerializer
+    queryset = CustomUser.objects.all()
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        user = CustomUser.objects.get(pk=serializer.data['id'])
+        if request.data.get('project'):
+            project = Project.objects.filter(pk=request.data.get('project'))
+            if len(project):
+                UserProject.objects.create(user=user, project=project[0])
+        serializer = self.get_serializer(user)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 class UserDetail(generics.RetrieveUpdateDestroyAPIView):
-    serializer_class = UserSerializer
-    queryset = User.objects.all()
+    serializer_class = CustomUserSerializer
+    queryset = CustomUser.objects.all()
 
     def put(self, request, *args, **kwargs):
         return self.patch(request, *args, **kwargs)
 
 
+class ProjectList(generics.ListCreateAPIView):
+    serializer_class = ProjectSerializer
+    queryset = Project.objects.all()
+
+    def get(self, request, *args, **kwargs):
+        for project in self.get_queryset():
+            query = UserProject.objects.filter(project=project)
+            if not len(query):
+                project.delete()
+        return self.list(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        data = request.data
+        if 'users' not in data:
+            return Response("Please specify user", status=status.HTTP_400_BAD_REQUEST)
+        else:
+            users = []
+            for userID in data['users']:
+                query = CustomUser.objects.filter(pk=userID)
+                if len(query):
+                    existingRelation = UserProject.objects.filter(user=query[0])
+                    if existingRelation:
+                        return Response("user {} already has project".format(userID), status=status.HTTP_400_BAD_REQUEST)
+                    users.append(query[0])
+            if len(users) <= 0:
+                return Response("Invalid users", status=status.HTTP_404_NOT_FOUND)
+            project = Project.objects.create(description=data['description'])
+            for user in users:
+                UserProject.objects.create(user=user, project=project)
+            serializer = self.get_serializer(project)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
+class AddressList(generics.ListCreateAPIView):
+    serializer_class = AddressSerializer
+    queryset = Address.objects.all()
 
 # class mainPage(View):
 #     def get(self, request):

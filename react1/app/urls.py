@@ -1,9 +1,11 @@
 from django.urls import path
-from .views import UserList, UserDetail
+from .views import UserList, UserDetail, AddressList, ProjectList
 
 urlpatterns = [
     path('users/', UserList.as_view(), name="user_list"),
-    path('users/<int:pk>/', UserDetail.as_view(), name="user_detail")
+    path('users/<int:pk>/', UserDetail.as_view(), name="user_detail"),
+    path('addresses/', AddressList.as_view(), name="address_list"),
+    path('projects/', ProjectList.as_view(), name="project_list"),
     # path('', mainPage.as_view(), name='mainPage'),
     # path('showall', showAllPage.as_view(), name='showAll'),
     # path('add/<str:name>/<int:price>', add.as_view(), name='adds'),
