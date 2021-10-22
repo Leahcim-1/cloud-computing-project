@@ -2,3 +2,4 @@
 **/.idea/
 __pycache__
 .DS_Store
+react1/mysql.cnf
